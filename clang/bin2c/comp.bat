@@ -1,0 +1,1 @@
+C:\MinGW\bin\gcc *.c -o bin2c
