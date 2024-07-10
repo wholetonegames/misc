@@ -14,21 +14,20 @@
 
 void usage(void);
 
-
 int main(int argc, char **argv)
 {
-	WSADATA w;							/* Used to open windows connection */
-	unsigned short port_number;			/* Port number to use */
-	int a1, a2, a3, a4;					/* Components of address in xxx.xxx.xxx.xxx form */
-	int client_length;					/* Length of client struct */
-	int bytes_received;					/* Bytes received from client */
-	SOCKET sd;							/* Socket descriptor of server */
-	struct sockaddr_in server;			/* Information about the server */
-	struct sockaddr_in client;			/* Information about the client */
-	char buffer[BUFFER_SIZE];			/* Where to store received data */
-	struct hostent *hp;					/* Information about this computer */
-	char host_name[256];				/* Name of the server */
-	time_t current_time;				/* Current time */
+	WSADATA w;					/* Used to open windows connection */
+	unsigned short port_number; /* Port number to use */
+	int a1, a2, a3, a4;			/* Components of address in xxx.xxx.xxx.xxx form */
+	int client_length;			/* Length of client struct */
+	int bytes_received;			/* Bytes received from client */
+	SOCKET sd;					/* Socket descriptor of server */
+	struct sockaddr_in server;	/* Information about the server */
+	struct sockaddr_in client;	/* Information about the client */
+	char buffer[BUFFER_SIZE];	/* Where to store received data */
+	struct hostent *hp;			/* Information about this computer */
+	char host_name[256];		/* Name of the server */
+	time_t current_time;		/* Current time */
 
 	/* Interpret command line */
 	if (argc == 2)
@@ -94,7 +93,7 @@ int main(int argc, char **argv)
 			WSACleanup();
 			exit(0);
 		}
-		
+
 		/* Assign the address */
 		server.sin_addr.S_un.S_un_b.s_b1 = hp->h_addr_list[0][0];
 		server.sin_addr.S_un.S_un_b.s_b2 = hp->h_addr_list[0][1];
@@ -121,9 +120,9 @@ int main(int argc, char **argv)
 
 	/* Print out server information */
 	printf("Server running on %u.%u.%u.%u\n", (unsigned char)server.sin_addr.S_un.S_un_b.s_b1,
-											  (unsigned char)server.sin_addr.S_un.S_un_b.s_b2,
-											  (unsigned char)server.sin_addr.S_un.S_un_b.s_b3,
-											  (unsigned char)server.sin_addr.S_un.S_un_b.s_b4);
+		   (unsigned char)server.sin_addr.S_un.S_un_b.s_b2,
+		   (unsigned char)server.sin_addr.S_un.S_un_b.s_b3,
+		   (unsigned char)server.sin_addr.S_un.S_un_b.s_b4);
 	printf("Press CTRL + C to quit\n");
 
 	/* Loop and get data from clients */
@@ -146,7 +145,7 @@ int main(int argc, char **argv)
 		{
 			/* Get current time */
 			current_time = time(NULL);
-			
+
 			/* Send data back */
 			if (sendto(sd, (char *)&current_time, (int)sizeof(current_time), 0, (struct sockaddr *)&client, client_length) != (int)sizeof(current_time))
 			{
