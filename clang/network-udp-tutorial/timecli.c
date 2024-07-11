@@ -40,8 +40,7 @@ int main(int argc, char **argv)
 	if (sd == INVALID_SOCKET)
 	{
 		fprintf(stderr, "Could not create socket.\n");
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Clear out server struct */
@@ -74,9 +73,7 @@ int main(int argc, char **argv)
 		if (hp == NULL)
 		{
 			fprintf(stderr, "Could not get host name.\n");
-			closesocket(sd);
-			WSACleanup();
-			exit(0);
+			clean_up_and_shutdown(sd);
 		}
 
 		/* Assign the address */
@@ -97,9 +94,7 @@ int main(int argc, char **argv)
 	if (bind(sd, (struct sockaddr *)&client, sizeof(struct sockaddr_in)) == -1)
 	{
 		fprintf(stderr, "Cannot bind address to socket.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Tranmsit data to get time */
@@ -107,25 +102,17 @@ int main(int argc, char **argv)
 	if (sendto(sd, send_buffer, (int)strlen(send_buffer) + 1, 0, (struct sockaddr *)&server, server_length) == -1)
 	{
 		fprintf(stderr, "Error transmitting data.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Receive time */
 	if (recvfrom(sd, (char *)&current_time, (int)sizeof(current_time), 0, (struct sockaddr *)&server, &server_length) < 0)
 	{
 		fprintf(stderr, "Error receiving data.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Display time */
 	printf("Current time: %s", ctime(&current_time));
-
-	closesocket(sd);
-	WSACleanup();
-
-	return 0;
+	clean_up_and_shutdown(sd);
 }

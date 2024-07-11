@@ -20,6 +20,7 @@ time_t current_time;        /* Current time */
 
 void server_usage(void);
 void client_usage(void);
+void clean_up_and_shutdown(SOCKET sd);
 
 // server only
 #define BUFFER_SIZE 4096
@@ -29,8 +30,8 @@ char buffer[BUFFER_SIZE]; /* Where to store received data */
 
 // client only
 #define SIZE 500
-int b1, b2, b3, b4;                      /* Client address components in xxx.xxx.xxx.xxx form */
-char send_buffer[SIZE] = "GET TIME\r\n"; /* Data to send */
-int server_length;                       /* Length of server struct */
+int b1, b2, b3, b4;            /* Client address components in xxx.xxx.xxx.xxx form */
+extern char send_buffer[SIZE]; /* Data to send */
+int server_length;             /* Length of server struct */
 
 #endif // VARIABLES_H

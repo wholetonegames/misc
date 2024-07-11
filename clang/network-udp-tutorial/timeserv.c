@@ -45,8 +45,7 @@ int main(int argc, char **argv)
 	if (sd == INVALID_SOCKET)
 	{
 		fprintf(stderr, "Could not create socket.\n");
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Clear out server struct */
@@ -67,9 +66,7 @@ int main(int argc, char **argv)
 		if (hp == NULL)
 		{
 			fprintf(stderr, "Could not get host name.\n");
-			closesocket(sd);
-			WSACleanup();
-			exit(0);
+			clean_up_and_shutdown(sd);
 		}
 
 		/* Assign the address */
@@ -91,9 +88,7 @@ int main(int argc, char **argv)
 	if (bind(sd, (struct sockaddr *)&server, sizeof(struct sockaddr_in)) == -1)
 	{
 		fprintf(stderr, "Could not bind name to socket.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Print out server information */
@@ -113,9 +108,7 @@ int main(int argc, char **argv)
 		if (bytes_received < 0)
 		{
 			fprintf(stderr, "Could not receive datagram.\n");
-			closesocket(sd);
-			WSACleanup();
-			exit(0);
+			clean_up_and_shutdown(sd);
 		}
 
 		/* Check for time request */
@@ -128,14 +121,9 @@ int main(int argc, char **argv)
 			if (sendto(sd, (char *)&current_time, (int)sizeof(current_time), 0, (struct sockaddr *)&client, client_length) != (int)sizeof(current_time))
 			{
 				fprintf(stderr, "Error sending datagram.\n");
-				closesocket(sd);
-				WSACleanup();
-				exit(0);
+				clean_up_and_shutdown(sd);
 			}
 		}
 	}
-	closesocket(sd);
-	WSACleanup();
-
-	return 0;
+	clean_up_and_shutdown(sd);
 }
