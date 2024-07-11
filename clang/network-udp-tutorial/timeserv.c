@@ -9,26 +9,12 @@
 #include <string.h>
 #include <winsock.h>
 #include <time.h>
-
-#define BUFFER_SIZE 4096
+#include "variables.h"
 
 void usage(void);
 
 int main(int argc, char **argv)
 {
-	WSADATA w;					/* Used to open windows connection */
-	unsigned short port_number; /* Port number to use */
-	int a1, a2, a3, a4;			/* Components of address in xxx.xxx.xxx.xxx form */
-	int client_length;			/* Length of client struct */
-	int bytes_received;			/* Bytes received from client */
-	SOCKET sd;					/* Socket descriptor of server */
-	struct sockaddr_in server;	/* Information about the server */
-	struct sockaddr_in client;	/* Information about the client */
-	char buffer[BUFFER_SIZE];	/* Where to store received data */
-	struct hostent *hp;			/* Information about this computer */
-	char host_name[256];		/* Name of the server */
-	time_t current_time;		/* Current time */
-
 	/* Interpret command line */
 	if (argc == 2)
 	{
@@ -56,7 +42,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Open windows connection */
-	if (WSAStartup(0x0101, &w) != 0)
+	if (WSAStartup(WINSOCK_VERSION, &w) != 0)
 	{
 		fprintf(stderr, "Could not open Windows connection.\n");
 		exit(0);

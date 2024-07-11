@@ -9,26 +9,12 @@
 #include <string.h>
 #include <winsock.h>
 #include <time.h>
-
-#define SIZE 500
+#include "variables.h"
 
 void usage(void);
 
 int main(int argc, char **argv)
 {
-	WSADATA w;								 /* Used to open Windows connection */
-	unsigned short port_number;				 /* The port number to use */
-	SOCKET sd;								 /* The socket descriptor */
-	int server_length;						 /* Length of server struct */
-	char send_buffer[SIZE] = "GET TIME\r\n"; /* Data to send */
-	time_t current_time;					 /* Time received */
-	struct hostent *hp;						 /* Information about the server */
-	struct sockaddr_in server;				 /* Information about the server */
-	struct sockaddr_in client;				 /* Information about the client */
-	int a1, a2, a3, a4;						 /* Server address components in xxx.xxx.xxx.xxx form */
-	int b1, b2, b3, b4;						 /* Client address components in xxx.xxx.xxx.xxx form */
-	char host_name[256];					 /* Host name of this computer */
-
 	/* Make sure command line is correct */
 	if (argc != 3 && argc != 4)
 	{
@@ -51,7 +37,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Open windows connection */
-	if (WSAStartup(0x0101, &w) != 0)
+	if (WSAStartup(WINSOCK_VERSION, &w) != 0)
 	{
 		fprintf(stderr, "Could not open Windows connection.\n");
 		exit(0);
