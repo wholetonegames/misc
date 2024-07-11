@@ -7,7 +7,7 @@
 #include <winsock.h>
 #include <time.h>
 
-#define WINSOCK_VERSION 0x0101
+#define WINSOCK_VERSION_1_1 0x0101
 WSADATA w;                  /* Used to open windows connection */
 unsigned short port_number; /* Port number to use */
 int a1, a2, a3, a4;         /* Components of address in xxx.xxx.xxx.xxx form */

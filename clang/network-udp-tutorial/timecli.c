@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Open windows connection */
-	if (WSAStartup(WINSOCK_VERSION, &w) != 0)
+	if (WSAStartup(WINSOCK_VERSION_1_1, &w) != 0)
 	{
 		fprintf(stderr, "Could not open Windows connection.\n");
 		exit(0);
