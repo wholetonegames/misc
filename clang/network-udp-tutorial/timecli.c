@@ -3,36 +3,28 @@
 /* Last modified: September 23, 2005 */
 /* http://www.gomorgan89.com */
 /* Link with library file wsock32.lib */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <winsock.h>
-#include <time.h>
 #include "variables.h"
-
-void usage(void);
 
 int main(int argc, char **argv)
 {
 	/* Make sure command line is correct */
 	if (argc != 3 && argc != 4)
 	{
-		usage();
+		client_usage();
 	}
 	if (sscanf(argv[1], "%d.%d.%d.%d", &a1, &a2, &a3, &a4) != 4)
 	{
-		usage();
+		client_usage();
 	}
 	if (sscanf(argv[2], "%u", &port_number) != 1)
 	{
-		usage();
+		client_usage();
 	}
 	if (argc == 4)
 	{
 		if (sscanf(argv[3], "%d.%d.%d.%d", &b1, &b2, &b3, &b4) != 4)
 		{
-			usage();
+			client_usage();
 		}
 	}
 
@@ -136,10 +128,4 @@ int main(int argc, char **argv)
 	WSACleanup();
 
 	return 0;
-}
-
-void usage(void)
-{
-	fprintf(stderr, "Usage: timecli server_address port [client_address]\n");
-	exit(0);
 }

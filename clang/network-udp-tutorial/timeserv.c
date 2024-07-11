@@ -3,15 +3,7 @@
 /* Last modified: September 20, 2005 */
 /* http://www.gomorgan89.com */
 /* Link with library file wsock32.lib */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <winsock.h>
-#include <time.h>
 #include "variables.h"
-
-void usage(void);
 
 int main(int argc, char **argv)
 {
@@ -21,7 +13,7 @@ int main(int argc, char **argv)
 		/* Use local address */
 		if (sscanf(argv[1], "%u", &port_number) != 1)
 		{
-			usage();
+			server_usage();
 		}
 	}
 	else if (argc == 3)
@@ -29,16 +21,16 @@ int main(int argc, char **argv)
 		/* Copy address */
 		if (sscanf(argv[1], "%d.%d.%d.%d", &a1, &a2, &a3, &a4) != 4)
 		{
-			usage();
+			server_usage();
 		}
 		if (sscanf(argv[2], "%u", &port_number) != 1)
 		{
-			usage();
+			server_usage();
 		}
 	}
 	else
 	{
-		usage();
+		server_usage();
 	}
 
 	/* Open windows connection */
@@ -146,10 +138,4 @@ int main(int argc, char **argv)
 	WSACleanup();
 
 	return 0;
-}
-
-void usage(void)
-{
-	fprintf(stderr, "timeserv [server_address] port\n");
-	exit(0);
 }

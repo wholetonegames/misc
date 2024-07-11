@@ -1,6 +1,9 @@
 #ifndef VARIABLES_H
 #define VARIABLES_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <winsock.h>
 #include <time.h>
 
@@ -14,6 +17,9 @@ struct sockaddr_in client;  /* Information about the client */
 struct hostent *hp;         /* Information about this computer */
 char host_name[256];        /* Name of the server */
 time_t current_time;        /* Current time */
+
+void server_usage(void);
+void client_usage(void);
 
 // server only
 #define BUFFER_SIZE 4096
