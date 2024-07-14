@@ -3,55 +3,33 @@
 /* Last modified: September 23, 2005 */
 /* http://www.gomorgan89.com */
 /* Link with library file wsock32.lib */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <winsock.h>
-
-#define SIZE 500
-
-void usage(void);
+#include "variables.h"
 
 int main(int argc, char **argv)
 {
-	WSADATA w;								/* Used to open Windows connection */
-	unsigned short port_number;				/* The port number to use */
-	SOCKET sd;								/* The socket descriptor */
-	int server_length;						/* Length of server struct */
-	char send_buffer[SIZE] = "GET TIME\r\n";/* Data to send */
-	time_t current_time;					/* Time received */
-	struct hostent *hp;						/* Information about the server */
-	struct sockaddr_in server;				/* Information about the server */
-	struct sockaddr_in client;				/* Information about the client */
-	int a1, a2, a3, a4;						/* Server address components in xxx.xxx.xxx.xxx form */
-	int b1, b2, b3, b4;						/* Client address components in xxx.xxx.xxx.xxx form */
-	char host_name[256];					/* Host name of this computer */
-
 	/* Make sure command line is correct */
 	if (argc != 3 && argc != 4)
 	{
-		usage();
+		client_usage();
 	}
 	if (sscanf(argv[1], "%d.%d.%d.%d", &a1, &a2, &a3, &a4) != 4)
 	{
-		usage();
+		client_usage();
 	}
 	if (sscanf(argv[2], "%u", &port_number) != 1)
 	{
-		usage();
+		client_usage();
 	}
 	if (argc == 4)
 	{
 		if (sscanf(argv[3], "%d.%d.%d.%d", &b1, &b2, &b3, &b4) != 4)
 		{
-			usage();
+			client_usage();
 		}
 	}
 
 	/* Open windows connection */
-	if (WSAStartup(0x0101, &w) != 0)
+	if (WSAStartup(WINSOCK_VERSION_1_1, &w) != 0)
 	{
 		fprintf(stderr, "Could not open Windows connection.\n");
 		exit(0);
@@ -62,8 +40,7 @@ int main(int argc, char **argv)
 	if (sd == INVALID_SOCKET)
 	{
 		fprintf(stderr, "Could not create socket.\n");
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Clear out server struct */
@@ -96,9 +73,7 @@ int main(int argc, char **argv)
 		if (hp == NULL)
 		{
 			fprintf(stderr, "Could not get host name.\n");
-			closesocket(sd);
-			WSACleanup();
-			exit(0);
+			clean_up_and_shutdown(sd);
 		}
 
 		/* Assign the address */
@@ -119,9 +94,7 @@ int main(int argc, char **argv)
 	if (bind(sd, (struct sockaddr *)&client, sizeof(struct sockaddr_in)) == -1)
 	{
 		fprintf(stderr, "Cannot bind address to socket.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Tranmsit data to get time */
@@ -129,32 +102,17 @@ int main(int argc, char **argv)
 	if (sendto(sd, send_buffer, (int)strlen(send_buffer) + 1, 0, (struct sockaddr *)&server, server_length) == -1)
 	{
 		fprintf(stderr, "Error transmitting data.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Receive time */
 	if (recvfrom(sd, (char *)&current_time, (int)sizeof(current_time), 0, (struct sockaddr *)&server, &server_length) < 0)
 	{
 		fprintf(stderr, "Error receiving data.\n");
-		closesocket(sd);
-		WSACleanup();
-		exit(0);
+		clean_up_and_shutdown(sd);
 	}
 
 	/* Display time */
 	printf("Current time: %s", ctime(&current_time));
-
-
-	closesocket(sd);
-	WSACleanup();
-
-	return 0;
-}
-
-void usage(void)
-{
-	fprintf(stderr, "Usage: timecli server_address port [client_address]\n");
-	exit(0);
+	clean_up_and_shutdown(sd);
 }
