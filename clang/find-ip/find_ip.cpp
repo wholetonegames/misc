@@ -29,6 +29,7 @@ std::string real_ip()
 }
 
 int main()
+
 {
     std::cout << real_ip() << "\n";
 }
