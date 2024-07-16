@@ -1,3 +1,4 @@
+// https://stackoverflow.com/questions/61447069/sfml-window-resizing-is-very-ugly
 #include <SFML/Graphics.hpp>
 
 int main()

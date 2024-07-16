@@ -13,6 +13,7 @@ int main()
     // Make a window that is 1024 by 768 pixels
     // And has the title "Pong"
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Pong");
+    sf::View view = window.getDefaultView();
 
     int score = 0;
     int lives = 3;
@@ -54,8 +55,16 @@ int main()
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-                // Someone closed the window- bye
+            {
                 window.close();
+            }
+
+            if (event.type == sf::Event::Resized)
+            {
+                view.setSize({static_cast<float>(event.size.width),
+                              static_cast<float>(event.size.height)});
+                window.setView(view);
+            }
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
