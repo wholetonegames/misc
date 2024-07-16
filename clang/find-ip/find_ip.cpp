@@ -5,15 +5,16 @@
 
 std::string real_ip()
 {
-
-    HINTERNET net = InternetOpen("IP retriever",
+    LPCWSTR ipr = (const WCHAR *)"IP retriever";
+    LPCWSTR rawsite = (const WCHAR *)"http://myexternalip.com/raw";
+    HINTERNET net = InternetOpen(ipr,
                                  INTERNET_OPEN_TYPE_PRECONFIG,
                                  NULL,
                                  NULL,
                                  0);
 
     HINTERNET conn = InternetOpenUrl(net,
-                                     "http://myexternalip.com/raw",
+                                     rawsite,
                                      NULL,
                                      0,
                                      INTERNET_FLAG_RELOAD,
